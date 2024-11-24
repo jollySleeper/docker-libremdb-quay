@@ -12,6 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   USER: jollysleeper
+  IMAGE_NAME: libremdb
 
 jobs:
 
@@ -39,6 +40,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
@@ -46,4 +53,6 @@ jobs:
         push: true
         file: docker/Dockerfile
         platforms: linux/amd64,linux/arm64
-        tags: ${{ env.REGISTRY }}/${{ env.USER }}/libremdb:latest
+        # tags: ${{ env.REGISTRY }}/${{ env.USER }}/${{ env.IMAGE_NAME }}:latest
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
