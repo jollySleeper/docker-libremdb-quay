@@ -11,6 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  USER: jollysleeper
 
 jobs:
 
@@ -45,4 +46,4 @@ jobs:
         push: true
         file: docker/Dockerfile
         platforms: linux/amd64,linux/arm64
-        tags: ${{ env.REGISTRY }}/${{ github.repository_owner.toLowerCase() }}/libremdb:latest
+        tags: ${{ env.REGISTRY }}/${{ env.USER }}/libremdb:latest
